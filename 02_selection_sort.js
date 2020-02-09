@@ -5,25 +5,31 @@
 */
 const assert = require('assert')
 
-function selectionSort(list) {
-  let result = []
-  let last = 0
+function getSmall(list) {
+  let small = list[0]
+  let smallIndex = 0
   for (let i in list) {
-    let smallest = 0
-    for (let e in list) {
-      if (smallest == 0 && result.indexOf(list[e]) < 0) {
-        smallest = list[e]
-      }
-      if (list[e] < smallest && result.indexOf(list[e]) < 0) {
-        smallest = list[e]
-      }
+    if (list[i] <= small) {
+      small = list[i]
+      smallindex = i
     }
-    result.push(smallest)
-    last = smallest
   }
-  const expected = list.sort((a,b)=>a-b)
-  console.log(expected)
-  assert.deepEqual(result, expected, `Not correct result expected \n${result} \nto be equal to \n${expected}`)
+  return smallindex
+}
+
+function selectionSort(list) {
+  const expected = [...list].sort((a,b)=>a-b)
+  const original = [...list]
+  let result = []
+  for (let i in original) {
+    let smallest = getSmall(list)
+    result.push(list.splice(smallest,1))
+  }
+  assert.deepEqual(
+    result.toString(), 
+    expected.toString(), 
+    `Not correct result expected \n${result} \nto be equal to \n${expected}`
+  )
   return expected
 }
 
